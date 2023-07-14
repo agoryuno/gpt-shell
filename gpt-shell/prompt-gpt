@@ -1,0 +1,17 @@
+#!/bin/bash
+
+input_string="$*"
+
+echo "Sending: $input_string"
+
+response=$(curl -sS https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_TOKEN" \
+  -d "{
+    \"model\": \"$OPENAI_MODEL\",
+    \"messages\": [{\"role\": \"system\", 
+                    \"content\": \"You are an expert in Linux shell programming.\"}, 
+                    {\"role\": \"user\", \"content\": \"$input_string\"}]
+  }")
+
+echo $response | jq -r '.choices[0].message.content'
